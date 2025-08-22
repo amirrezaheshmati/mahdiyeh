@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 #from django.contrib.auth.models import User
 
 # Create your models here.
@@ -50,3 +51,13 @@ class Discount(models.Model) :
     
     def __str__(self) :
         return f"{self.name} => {self.percent}"
+    
+class Order(models.Model) :
+    product = models.ForeignKey(Product , on_delete=models.CASCADE)
+    special = models.ForeignKey(Special , on_delete=models.CASCADE)
+    discount = models.ForeignKey(Discount , on_delete=models.CASCADE)
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    date_sended = models.CharField()
+    count = models.PositiveIntegerField(default=0)
+    receive_code = models.PositiveBigIntegerField(default=0)
+    

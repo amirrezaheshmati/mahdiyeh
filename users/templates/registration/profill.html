@@ -1,0 +1,9 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<p>user : {{user.username}}</p>
+<form action="{% url 'users:profill' totall_price %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Fill in</button>
+</form>
+{% endblock content %}
