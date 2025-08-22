@@ -3,9 +3,10 @@
 <ul>
     {% for spe in special %}
     <li>
-        <img src="{{spe.picture.url}}" alt="{{spe.name}}" style="width: 200px;">
+        <img src="{{spe.picture.url}}" alt="{{spe.url_name}}" style="width: 200px;">
         <p>{{spe.name}}</p>
         <p>{{spe.price}}</p>
+        <p><a href="{% url 'ghoghnoos:product' spe.url_name %}">Buy</a></p>
     </li>
     {% endfor %}
 </ul>

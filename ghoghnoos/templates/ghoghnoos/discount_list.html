@@ -3,11 +3,12 @@
 <ul>
     {% for dis in discount %}
     <li>
-        <img src="{{dis.picture.url}}" alt="{{dis.name}}" style="width: 200px;">
+        <img src="{{dis.picture.url}}" alt="{{dis.url_name}}" style="width: 200px;">
         <p>{{dis.name}}</p>
         <p>{{dis.price1}}</p>
-        <p>{{dis.price2}}</p>
+        <p>{{dis.price}}</p>
         <p>{{dis.percent}}</p>
+        <p><a href="{% url 'ghoghnoos:product' dis.url_name %}">Buy</a></p>
     </li>
     {% endfor %}
 </ul>

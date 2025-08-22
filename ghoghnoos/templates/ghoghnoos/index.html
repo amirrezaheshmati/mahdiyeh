@@ -4,9 +4,10 @@
     <h5><a href="{% url 'ghoghnoos:special_list' %}">special</a></h5>
     {% for spe in special %}
     <li>
-        <img src="{{spe.picture.url}}" alt="{{spe.name}}" style="width: 200px;">
+        <img src="{{spe.picture.url}}" alt="{{spe.url_name}}" style="width: 200px;">
         <p>{{spe.name}}</p>
         <p>{{spe.price}}</p>
+        <p><a href="{% url 'ghoghnoos:product' spe.url_name %}">Buy</a></p>
     </li>
     {% endfor %}
 </ul>
@@ -14,11 +15,12 @@
     <h5><a href="{% url 'ghoghnoos:discount_list' %}">discount</a></h5>
     {% for dis in discount %}
     <li>
-        <img src="{{dis.picture.url}}" alt="{{dis.name}}" style="width: 200px;">
+        <img src="{{dis.picture.url}}" alt="{{dis.url_name}}" style="width: 200px;">
         <p>{{dis.name}}</p>
         <p>{{dis.price1}}</p>
-        <p>{{dis.price2}}</p>
+        <p>{{dis.price}}</p>
         <p>{{dis.percent}}</p>
+        <p><a href="{% url 'ghoghnoos:product' dis.url_name %}">Buy</a></p>
     </li>
     {% empty %}
     <p>Nothing</p>
@@ -28,7 +30,7 @@
 <ul>
     {% for cate in category %}
     <li>
-        <a href="{% url 'ghoghnoos:subset_list' cate.name %}">{{cate.name}}</a>
+        <a href="{% url 'ghoghnoos:subset_list' cate.url_name %}">{{cate.name}}</a>
     </li>
     {% empty %}
     <p>Nothing</p>

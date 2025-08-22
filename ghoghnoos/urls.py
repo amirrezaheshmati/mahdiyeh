@@ -8,4 +8,5 @@ urlpatterns = [
     path("product_list/<str:category_name>/<str:subset_name>/" , views.product_list , name="product_list"),
     path("special_list/" , views.special_list , name="special_list"),
     path("discount_list/" , views.discount_list , name="discount_list"),
+    path("product/<str:product_name>/" , views.product , name="product")
 ]

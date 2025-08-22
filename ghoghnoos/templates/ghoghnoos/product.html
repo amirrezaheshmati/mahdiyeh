@@ -1,0 +1,7 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<img src="{{product.picture.url}}" alt="{{product.url_name}}" style="width: 200px;">
+<p>{{product.name}}</p>
+<p>{{product.price}}</p>
+<p>{{product.describe}}</p>
+{% endblock content %}

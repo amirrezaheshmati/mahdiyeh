@@ -3,9 +3,10 @@
 <ul>
     {% for pro in product %}
     <li>
-        <img src="{{pro.picture.url}}" alt="{{pro.name}}" style="width: 200px;">
+        <img src="{{pro.picture.url}}" alt="{{pro.url_name}}" style="width: 200px;">
         <p>{{pro.name}}</p>
         <p>{{pro.price}}</p>
+        <p><a href="{% url 'ghoghnoos:product' pro.url_name %}">Buy</a></p>
     </li>
     {% empty %}
     <p>Nothing</p>
