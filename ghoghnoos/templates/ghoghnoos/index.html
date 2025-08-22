@@ -1,0 +1,37 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    <h5><a href="{% url 'ghoghnoos:special_list' %}">special</a></h5>
+    {% for spe in special %}
+    <li>
+        <img src="{{spe.picture.url}}" alt="{{spe.name}}" style="width: 200px;">
+        <p>{{spe.name}}</p>
+        <p>{{spe.price}}</p>
+    </li>
+    {% endfor %}
+</ul>
+<ul>
+    <h5><a href="{% url 'ghoghnoos:discount_list' %}">discount</a></h5>
+    {% for dis in discount %}
+    <li>
+        <img src="{{dis.picture.url}}" alt="{{dis.name}}" style="width: 200px;">
+        <p>{{dis.name}}</p>
+        <p>{{dis.price1}}</p>
+        <p>{{dis.price2}}</p>
+        <p>{{dis.percent}}</p>
+    </li>
+    {% empty %}
+    <p>Nothing</p>
+    {% endfor %}
+</ul>
+<p>cate</p>
+<ul>
+    {% for cate in category %}
+    <li>
+        <a href="{% url 'ghoghnoos:subset_list' cate.name %}">{{cate.name}}</a>
+    </li>
+    {% empty %}
+    <p>Nothing</p>
+    {% endfor %}
+</ul>
+{% endblock content %}

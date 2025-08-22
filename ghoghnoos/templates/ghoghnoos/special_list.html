@@ -1,0 +1,12 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for spe in special %}
+    <li>
+        <img src="{{spe.picture.url}}" alt="{{spe.name}}" style="width: 200px;">
+        <p>{{spe.name}}</p>
+        <p>{{spe.price}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

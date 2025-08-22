@@ -1,0 +1,14 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for pro in product %}
+    <li>
+        <img src="{{pro.picture.url}}" alt="{{pro.name}}" style="width: 200px;">
+        <p>{{pro.name}}</p>
+        <p>{{pro.price}}</p>
+    </li>
+    {% empty %}
+    <p>Nothing</p>
+    {% endfor %}
+</ul>
+{% endblock content %}

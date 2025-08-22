@@ -1,0 +1,14 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for dis in discount %}
+    <li>
+        <img src="{{dis.picture.url}}" alt="{{dis.name}}" style="width: 200px;">
+        <p>{{dis.name}}</p>
+        <p>{{dis.price1}}</p>
+        <p>{{dis.price2}}</p>
+        <p>{{dis.percent}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

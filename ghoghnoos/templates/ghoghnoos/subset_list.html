@@ -1,0 +1,10 @@
+{% extends 'ghoghnoos/base.html' %}
+{% block content %}
+<ul>
+    {% for product in subset %}
+    <li><a href="{% url 'ghoghnoos:product_list' category_name product.name %}">{{product.name}}</a></li>
+    {% empty %}
+    <p>Nothing</p>
+    {% endfor %}
+</ul>
+{% endblock content %}

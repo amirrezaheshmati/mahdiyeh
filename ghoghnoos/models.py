@@ -21,6 +21,25 @@ class Product(models.Model):
     price = models.PositiveBigIntegerField()
     #likes = models.ManyToManyField(User , blank=True , related_name="like")
     picture = models.ImageField()
+    describe = models.TextField()
     
     def __str__(self) :
         return self.name
+
+class Special(models.Model) :
+    name = models.CharField(max_length=20)
+    price = models.PositiveBigIntegerField()
+    picture = models.ImageField()
+    
+    def __str__(self) :
+        return self.name
+
+class Discount(models.Model) :
+    name = models.CharField(max_length=20)
+    price1 = models.PositiveBigIntegerField()
+    price2 = models.PositiveBigIntegerField()
+    percent = models.IntegerField(default=0)
+    picture = models.ImageField()
+    
+    def __str__(self) :
+        return f"{self.name} => {self.percent}"
