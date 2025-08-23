@@ -1,0 +1,33 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<h3>{{product.name}} :</h3>
+<img src="{{product.picture.url}}" alt="{{product.url_name}}" style="width: 200px;">
+<p>{{product.price}}</p>
+<h4>Colors:</h4>
+<ul>
+    {% for col in color %}
+    <li>
+        <p>{{col.name_color}}</p>
+    </li>
+    {% endfor %}
+</ul>
+<h4>Size:</h4>
+<ul>
+    {% for siz in size %}
+    <li>
+        <p>{{siz.height}}*{{siz.width}}*{{siz.colm}}</p>
+    </li>
+    {% endfor %}
+</ul>
+<form action="{% url 'ghoghnoos:edit_product' product.url_name %}"
+enctype="multipart/form-data" method="post">
+    {%csrf_token%}
+    <h5>product edit</h5>
+    {{form_product.as_p}}
+    <h5>color edit</h5>
+    {{form_color.as_p}}
+    <h5>size edit</h5>
+    {{form_size.as_p}}
+    <button name="submit">Edit</button>
+</form>
+{% endblock content %}

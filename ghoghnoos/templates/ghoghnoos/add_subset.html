@@ -1,0 +1,16 @@
+{% extends 'ghoghnoos/base.html' %}
+{% block content %}
+<h3>{{category.name}}</h3>
+<ul>
+    {% for sub in subset %}
+    <li>
+        <a href="{% url 'ghoghnoos:add_product' category.name sub.url_name %}">{{sub.name}}</a>
+    </li>
+    {% endfor %}
+</ul>
+<form action="{% url 'ghoghnoos:add_subset' category.url_name %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Add</button>
+</form>
+{% endblock content %}

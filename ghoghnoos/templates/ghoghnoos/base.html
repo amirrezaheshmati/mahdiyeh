@@ -3,6 +3,7 @@
     <p>Hello {{user.username}}.</p>
     {% endif %}
     <a href="{% url 'ghoghnoos:index' %}">Home</a> -
+    <a href="{% url 'ghoghnoos:admin_panel' %}">Admin Panel</a> -
     {% if not user.is_authenticated %} 
     <a href="{% url 'users:login' %}">Log in</a> -
     <a href="{% url 'users:register' %}">Register</a>

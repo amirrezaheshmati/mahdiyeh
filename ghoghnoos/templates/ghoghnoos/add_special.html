@@ -1,0 +1,8 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<form action="{% url 'ghoghnoos:add_special' %}" method="post"  enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Add</button>
+</form>
+{% endblock content %}

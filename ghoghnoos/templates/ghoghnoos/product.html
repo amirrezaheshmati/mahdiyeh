@@ -4,4 +4,11 @@
 <p>{{product.name}}</p>
 <p>{{product.price}}</p>
 <p>{{product.describe}}</p>
+<form action="{% url 'ghoghnoos:product' product.url_name  %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    {{form2.as_p}}
+    <button name="submit">Buy</button>
+</form>
+<p><a href="{% url 'ghoghnoos:edit_product' product.url_name %}">Edit</a></p>
 {% endblock content %}
