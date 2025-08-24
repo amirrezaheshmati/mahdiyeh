@@ -1,9 +1,6 @@
-{% extends 'ghoghnoos/base.html' %}
+{% extends "ghoghnoos/base.html" %}
 {% block content %}
 {% load humanize %}
-<p><a href="{% url 'ghoghnoos:user_action' %}">Action</a></p>
-<h4>Totall price : {{totall_price|intcomma}}</h4>
-<a href="{% url 'users:profill' totall_price %}">Buy</a>
 <ul>
     {% for ord in order %}
     <li>
@@ -22,19 +19,11 @@
         <p>{{ord.discount.name}}</p>
         <p>{{ord.discount.totall_price|intcomma}}</p>
         {% endif %}
-        <p>{{ord.count}}</p>
+        <p>{{ord.count_action}}</p>
         <p>{{ord.color}}</p>
         <p>{{ord.size}}</p>
+        <p>{{ord.date_added}}</p>
         <p>{{ord.describe}}</p>
-        {% if  ord.product %}
-        <p><a href="{% url 'ghoghnoos:product' ord.product.url_name %}">Edit</a></p>
-        {% endif %}
-        {% if ord.special %}
-        <p><a href="{% url 'ghoghnoos:product' ord.special.url_name %}">Edit</a></p>
-        {% endif %}
-        {% if ord.discount %}
-        <p><a href="{% url 'ghoghnoos:product' ord.discount.url_name %}">Edit</a></p>
-        {% endif %}
     </li>
     {% endfor %}
 </ul>

@@ -17,4 +17,7 @@ urlpatterns = [
     path("all_products/" , views.all_products , name="all_products"),
     path("add_special/" , views.add_special , name="add_special"),
     path("add_discount/" , views.add_discount , name="add_discount"),
+    path("buy_page/" , views.buy_page , name="buy_page"),
+    path("admin_action/" , views.admin_action , name="admin_action"),
+    path("user_action/" , views.user_action , name="user_action"),
 ]

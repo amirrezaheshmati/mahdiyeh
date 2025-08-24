@@ -127,22 +127,27 @@ class AddColor(forms.ModelForm) :
 class AddSize(forms.ModelForm) :
     class Meta :
         model = Size
-        fields = ["height" , "width" , "colm" , "price_size" ,"count"]
+        fields = ["height" , "width" , "colm" , "price_size"]
         labels = {"height" : "طول" , "width" : "عرض" ,
-                  "colm" : "ارتفاع" , "price_size" : "قیمت" , "count" : "تعداد موجودی"}
-
-class OrderForm(forms.Form) :
-    color = forms.ModelChoiceField(queryset=Colors.objects.none() , empty_label="انتخاب رنگ")
-    size = forms.ModelChoiceField(queryset=Size.objects.none() , empty_label="انتخاب سایز")
-    
-    def __init__(self , *args , **kwargs) :
-        product = kwargs.pop("product")
-        super().__init__(*args , **kwargs)
-        self.fields["color"].queryset = product.colors_set.all()
-        self.fields["size"].queryset = product.size_set.all()
+                  "colm" : "ارتفاع" , "price_size" : "قیمت"}
         
-class OrderForm2(forms.ModelForm) :
+class OrderForm(forms.ModelForm) :
+    color = forms.ModelChoiceField(
+        queryset=Colors.objects.none(),  # اول خالی
+        empty_label="انتخاب رنگ"
+    )
+    size = forms.ModelChoiceField(
+        queryset=Size.objects.none(),
+        empty_label="انتخاب سایز"
+    )
     class Meta :
         model = Order
-        fields = ["count" , "describe"]
-        labels = {"count" : "تعداد" , "describe" : "ملاحظات"}
+        fields = ["count" , "color" , "size", "describe"]
+        labels = {"count" : "تعداد" ,"color" : "رنگ" , "size" : "اندازه", "describe" : "ملاحظات"}
+    
+    def __init__(self, *args, **kwargs):
+        product = kwargs.pop("product", None)
+        super().__init__(*args, **kwargs)
+        if product:
+            self.fields["color"].queryset = product.colors_set.all()
+            self.fields["size"].queryset = product.size_set.all()

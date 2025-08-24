@@ -1,6 +1,7 @@
 from django.shortcuts import render , redirect
-from .models import Product , Category , Subset , Discount , Special 
-from .form import AddProduct , AddCategory , AddSubset , AddColor , AddSize , OrderForm , AddSpecial , AddDiscount , OrderForm2
+from django.db.models import Q
+from .models import Product , Category , Subset , Discount , Special , Order , Colors , Size
+from .form import AddProduct , AddCategory , AddSubset , AddColor , AddSize , OrderForm , AddSpecial , AddDiscount
 # Create your views here.
 
 def index(request):
@@ -33,25 +34,78 @@ def discount_list(request) :
     return render(request , "ghoghnoos/discount_list.html" , context)
 
 def product(request , product_name) :
+    special = False
+    discount = False
+    pro = False
     try :
         product = Special.objects.get(url_name = product_name)
+        special = True
     except Special.DoesNotExist :
         try :
             product = Discount.objects.get(url_name = product_name)
+            discount = True
         except Discount.DoesNotExist :
             product = Product.objects.get(url_name = product_name)
+            pro = True
     
+    try :
+        if special :
+            order = Order.objects.get(user = request.user,
+                                  special = product)
+        elif discount :
+            order = Order.objects.get(user = request.user,
+                                  discount = product)
+        elif pro :
+            order = Order.objects.get(user = request.user,
+                                  product = product)
+    except Order.DoesNotExist :
+        if special :
+            order = Order(user = request.user,
+                                  special = product)
+        elif discount :
+            order = Order(user = request.user,
+                                  discount = product)
+        elif pro :
+            order = Order(user = request.user,
+                                  product = product)
+        
     if request.method != "POST" :
-        form = OrderForm(product = product)
-        form2 = OrderForm2()
+        form = OrderForm(instance=order , product = product)
     else :
-        form = OrderForm(request.POST , product = product)
-        form2 = OrderForm2(data=request.POST)
+        form = OrderForm(data=request.POST , instance=order , product = product)
         if form.is_valid() :
-            selected_color = form.cleaned_data["color"]
-            return redirect("ghoghnoos:index")
+            new_order = form.save(commit=False)
+            product.totall_price = product.price
+            new_order.user = request.user
+            if special :
+                color = Colors.objects.filter(special = product)
+                size = Size.objects.filter(special = product)
+                new_order.special = product
+            elif discount :
+                color = Colors.objects.filter(discount = product)
+                size = Size.objects.filter(discount = product)
+                new_order.discount = product
+            elif pro :
+                color = Colors.objects.filter(product = product)
+                size = Size.objects.filter(product = product)
+                new_order.product = product
+            main_color = color.get(name_color = new_order.color)
+            size_name = new_order.size.replace("*" , " ").split()
+            main_size = size.get(height = size_name[0] , width = size_name[1] , colm = size_name[2])
+            if new_order.count > main_color.count :
+                new_order.count = main_color.count
+            product.totall_price += main_color.price_color
+            product.totall_price += main_size.price_size
+            if new_order.count > 0 :
+                new_order.add_buy_page = True
+            else :
+                new_order.add_buy_page = False
+            new_order.save()
+            print(product.totall_price)
+            product.save()
+            return redirect("ghoghnoos:product" , product_name = product_name)
     
-    context = {"product" : product , "form" : form , "form2" : form2}
+    context = {"product" : product , "form" : form}
     return render(request , "ghoghnoos/product.html" , context)
 
 def add_product(request , category_name , subset_url) :
@@ -66,7 +120,9 @@ def add_product(request , category_name , subset_url) :
             new_product = form.save(commit=False)
             new_product.subset = subset
             new_product.url_name = new_product.name.replace(" " , "-")
+            new_product.totall_price = new_product.price
             new_product.save()
+            print(new_product.totall_price)
             return redirect("ghoghnoos:edit_product" , product_url = new_product.url_name)
     
     context = {"form" : form , "category" : category , "subset" : subset}
@@ -184,6 +240,7 @@ def add_special(request) :
         if form.is_valid() :
             new_special = form.save(commit=False)
             new_special.url_name = new_special.name.replace(" " , "-")
+            new_special.totall_price = new_special.price
             new_special.save()
             return redirect("ghoghnoos:edit_product" , product_url = new_special.url_name)
     
@@ -201,8 +258,42 @@ def add_discount(request) :
             num1 = new_discount.price1
             num2 = new_discount.price
             new_discount.percent = 100 - int((num2/num1)*100)
+            new_discount.totall_price = new_discount.price
             new_discount.save()
             return redirect("ghoghnoos:edit_product" , product_url = new_discount.url_name)
     
     context = {"form" : form}
     return render(request , "ghoghnoos/add_discount.html" , context)
+
+def buy_page(request) :
+    order = Order.objects.all().filter(user = request.user , count__gt = 0 , add_buy_page = True)
+    totall_price = 0
+    for obj in order :
+        try :
+            price = obj.special.totall_price * obj.count
+             
+        except AttributeError :
+            try :
+                price = obj.discount.totall_price * obj.count
+            except  AttributeError:
+                price = obj.product.totall_price * obj.count
+                
+        totall_price += price
+    context = {"order" : order , "totall_price" : totall_price}
+    return render(request , "ghoghnoos/buy_page.html" , context)
+
+def admin_action(request) :
+    users = []
+    order = Order.objects.all().filter(buy_action = True)
+    for obj in order :
+        users.append(obj.user)
+    
+    users = set(users)
+    context = {"users" : users}
+    return render(request , "ghoghnoos/admin_action.html" , context)
+
+def user_action(request) :
+    user = request.user
+    order = user.order_set.all()
+    context = {"order" : order}
+    return render(request , 'ghoghnoos/user_action.html' , context)
