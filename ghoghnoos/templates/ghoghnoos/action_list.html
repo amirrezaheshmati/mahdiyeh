@@ -1,14 +1,12 @@
 {% extends "ghoghnoos/base.html" %}
 {% block content %}
 {% load humanize %}
-{% if tracking %}
-<p>link : {{tracking.link}}</p>
-<p>code : {{tracking.tracking_code}}</p>
-<form action="{% url 'ghoghnoos:user_action' %}" method="post">
-    {% csrf_token %}
-    <button name="submit">Delete</button>
-</form>
-{% endif %}
+<h4>person information :</h4>
+<h5>username : {{acount.name}}</h5>
+<p>{{acount.number_phone1}}</p>
+<p>{{acount.number_phone2}}</p>
+<p>{{acount.post_code}}</p>
+<p>{{acount.addres}}</p>
 <ul>
     {% for ord in order %}
     <li>
@@ -30,7 +28,6 @@
         <p>{{ord.count_action}}</p>
         <p>{{ord.color}}</p>
         <p>{{ord.size}}</p>
-        <p>{{ord.date_added}}</p>
         <p>{{ord.describe}}</p>
     </li>
     {% endfor %}

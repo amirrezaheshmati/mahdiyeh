@@ -1,7 +1,11 @@
-from django.shortcuts import render , redirect
+from django.shortcuts import render, get_object_or_404 , redirect
 from django.db.models import Q
-from .models import Product , Category , Subset , Discount , Special , Order , Colors , Size
-from .form import AddProduct , AddCategory , AddSubset , AddColor , AddSize , OrderForm , AddSpecial , AddDiscount
+from users.models import Acount
+from .models import Product , Category , Subset , Discount ,\
+    Special , Order , Colors , Size , User , TrackingCode , Comments , Replay
+from .form import AddProduct , AddCategory , AddSubset , AddColor , \
+    AddSize , OrderForm , AddSpecial , AddDiscount , TrackingForm , ReplayAdded , CommentAdded
+import jdatetime
 # Create your views here.
 
 def index(request):
@@ -285,15 +289,181 @@ def buy_page(request) :
 def admin_action(request) :
     users = []
     order = Order.objects.all().filter(buy_action = True)
+    if request.method != "POST" :
+        form = TrackingForm()
+    else :
+        form = TrackingForm(data=request.POST)
+        if form.is_valid() :
+            username = request.POST.get("hidden_value")
+            user = User.objects.get(username = username)
+            tracking = form.save(commit=False)
+            tracking.user = user
+            tracking.save()
+            return redirect("ghoghnoos:complite" , username = user.username)
     for obj in order :
         users.append(obj.user)
     
     users = set(users)
-    context = {"users" : users}
+    context = {"users" : users , "form" : form}
     return render(request , "ghoghnoos/admin_action.html" , context)
 
 def user_action(request) :
     user = request.user
-    order = user.order_set.all()
-    context = {"order" : order}
+    order = user.order_set.all().filter(buy_action = True)
+    if request.method =="POST" :
+        TrackingCode.objects.get(user = user).delete()
+    try :
+        tracking = TrackingCode.objects.get(user = user)
+    except TrackingCode.DoesNotExist :
+        tracking = False
+    context = {"order" : order , "tracking" : tracking}
     return render(request , 'ghoghnoos/user_action.html' , context)
+
+def action_list(request , username) :
+    user = User.objects.get(username = username)
+    order = Order.objects.all().filter(user = user , buy_action = True)
+    acount = Acount.objects.get(user = user)
+    context = {"order" : order , "acount" : acount}
+    return render(request , 'ghoghnoos/action_list.html' , context)
+
+def complite_order(request , username) :
+    user = User.objects.get(username = username)
+    order = Order.objects.all().filter(user = user , buy_action = True)
+    for obj in order :
+        obj.buy_action = False
+        if obj.product :
+            new_order = Order.objects.create(
+                product = obj.product ,
+                user = obj.user
+            )
+        elif obj.special :
+            new_order = Order.objects.create(
+                special = obj.special, 
+                user = obj.user
+            )
+        elif obj.discount :
+            new_order = Order.objects.create(
+                discount = obj.discount ,
+                user = obj.user
+            )
+        new_order.describe = obj.describe
+        new_order.color = obj.color
+        new_order.size = obj.size
+        new_order.date_added = obj.date_added
+        new_order.date_sended = f"{jdatetime.datetime.now().strftime("%Y/%m/%d : %H")}"
+        new_order.count_history = obj.count_action
+        new_order.buy_history = True
+        new_order.save()
+        obj.save()
+    
+    return redirect("ghoghnoos:admin_action")
+
+def buy_history(request) :
+    user = request.user
+    order = Order.objects.all().filter(user = user , buy_history = True)
+    context = {"order" : order}
+    return render(request , "ghoghnoos/buy_history.html" , context)
+
+def admin_history(request) :
+    order = Order.objects.all().filter(buy_history = True)
+    context = {"order" : order}
+    return render(request , "ghoghnoos/admin_history.html" , context)
+
+def like_post(request, post_id) :
+    try :
+        like = get_object_or_404(Product , id = post_id)
+    except  Product.DoesNotExist :
+        try :
+            like = get_object_or_404(Special , id = post_id)
+        except Special.DoesNotExist :
+            like = get_object_or_404(Discount , id = post_id)
+    if request.user in like.likes.all() :
+        like.likes.remove(request.user)
+    else :
+        like.likes.add(request.user)
+        
+    return redirect("ghoghnoos:product_list")
+
+def like_comment(request , comment_id , product_id) :
+    like = get_object_or_404(Comments , id = comment_id)
+    if request.user in like.likes.all() :
+        like.likes.remove(request.user)
+    else :
+        like.likes.add(request.user)
+
+    return redirect("ghoghnoos:comments" , product_id = product_id)
+
+def comments(request , product_id) :
+    try :
+        product = Product.objects.get(id = product_id)
+    except Product.DoesNotExist :
+        try :
+            product = Special.objects.get(id = product_id)
+        except Special.DoesNotExist :
+            product = Discount.objects.get(id = product_id)
+    comments = product.comments_set.order_by("date_added")
+    context = {"product" : product , "comments" : comments}
+    return render(request , "ghoghnoos/comments.html" , context)
+
+def add_comment(request , product_id) :
+    pro = False
+    special = False
+    discount = False
+    try :
+        product = Product.objects.get(id = product_id)
+        pro = True
+    except Product.DoesNotExist :
+        try :
+            product = Special.objects.get(id = product_id)
+            special = True
+        except Special.DoesNotExist :
+            product = Discount.objects.get(id = product_id)
+            discount = True
+    if request.method != "POST" :
+        form = CommentAdded()
+    else :
+        form = CommentAdded(data=request.POST)
+        if form.is_valid() :
+            new_comment = form.save(commit=False)
+            new_comment.user = request.user
+            if pro :
+                new_comment.product = product
+            elif special :
+                new_comment.special = product
+            elif discount :
+                new_comment.discount = product
+            new_comment.save()
+            return redirect("ghoghnoos:comments" , product_id = product_id)
+    
+    context = {"form" : form , "product" : product}
+    return render(request , "ghoghnoos/add_comment.html" , context)
+
+def add_replay(request , comment_id , product_id) :
+    comment = Comments.objects.get(id = comment_id)
+    if request.method != "POST" :
+        form = ReplayAdded()
+    else :
+        form = ReplayAdded(data=request.POST)
+        if form.is_valid() :
+            new_replay = form.save(commit=False)
+            new_replay.comment = comment
+            new_replay.user = request.user
+            new_replay.save()
+            return redirect("ghoghnoos:comments" ,product_id = product_id )
+    
+    context = {"form" : form , "comment" : comment , "product_id" : product_id}
+    return render(request , "ghoghnoos/add_replay.html" , context)
+
+def search_product(request) :
+    query = request.GET.get("q")
+    product = Product.objects.all()
+    special = Special.objects.all()
+    discount = Discount.objects.all()
+    if query :
+        product = product.filter(name__icontains = query)
+        special = special.filter(name__icontains = query)
+        discount = discount.filter(name__icontains = query)
+        
+    context = {"query" : query , "product" : product
+               , "special" : special , "discount" : discount}
+    return render(request , "ghoghnoos/search_result.html" , context)

@@ -1,0 +1,21 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for chat in chats %}
+    <li>
+        <p>{{chat.sender}}</p>
+        <p>{{chat.text}}</p>
+        {% if chat.user_read %}
+        <p>!!</p>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>nothing</p>
+    {% endfor %}
+</ul>
+<form action="{% url 'users:chat_admin_page' userr.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Send</button>
+</form>
+{% endblock content %}

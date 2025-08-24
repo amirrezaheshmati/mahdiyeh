@@ -7,6 +7,7 @@
         <p>{{pro.name}}</p>
         <p>{{pro.price}}</p>
         <p><a href="{% url 'ghoghnoos:product' pro.url_name %}">Buy</a></p>
+        <p><a href="{% url 'ghoghnoos:comments' pro.id %}">comments</a></p>
     </li>
     {% empty %}
     <p>Nothing</p>

@@ -1,0 +1,34 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<p>{{product.name}}:</p>
+{% if user.is_authenticated %}
+<p><a href="{% url 'ghoghnoos:add_comment' product.id %}">Add comment</a></p>
+{% else %}
+<p><a href="{% url 'users:login' %}">Add comment</a></p>
+{% endif %}
+<ul>
+    {% for com in comments %}
+    <li>
+        <p>{{com.user.username}}</p>
+        {% if user.is_authenticated %}
+        <p>{{com.text}} - <a href="{% url 'ghoghnoos:add_replay' product.id com.id %}">Replay</a></p>
+        {% endif %}
+        <p>Like : {{com.likes.count}}</p>
+        {% if user.is_authenticated %}
+        <form action="{% url 'ghoghnoos:like_comment' com.id product.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">
+                <p>Like</p>
+            </button>
+        </form>
+        {% endif %}
+        <p>replay :</p>
+        {% for rep in com.replay.all %}
+        <p>{{rep.user.username}} : {{rep.text}}</p>
+        {% endfor %}
+    </li>
+    {% empty %}
+    <li>nothing</li>
+    {% endfor %}
+</ul>
+{% endblock content %}

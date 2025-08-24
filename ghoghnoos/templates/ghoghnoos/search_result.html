@@ -1,0 +1,23 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for pro in product %}
+    <li>
+        <img src="{{pro.picture.url}}" alt="{{pro.url_name}}" style="width: 200px;">
+        <p>{{pro.name}}</p>
+    </li>
+    {% endfor %}
+    {% for spe in special %}
+    <li>
+        <img src="{{spe.picture.url}}" alt="{{spe.url_name}}" style="width: 200px;">
+        <p>{{spe.name}}</p>
+    </li>
+    {% endfor %}
+    {% for dis in discount %}
+    <li>
+        <img src="{{dis.picture.url}}" alt="{{dis.url_name}}" style="width: 200px;">
+        <p>{{dis.name}}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock content %}

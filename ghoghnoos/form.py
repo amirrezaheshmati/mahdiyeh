@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Product , Category , Subset , Special , Discount , Colors, Size , Order
+from .models import Product , Category , Subset ,\
+Special , Discount , Colors, Size , Order , TrackingCode , Comments , Replay
 
 class AddProduct(forms.ModelForm) :
     class Meta :
@@ -151,3 +152,21 @@ class OrderForm(forms.ModelForm) :
         if product:
             self.fields["color"].queryset = product.colors_set.all()
             self.fields["size"].queryset = product.size_set.all()
+
+class TrackingForm(forms.ModelForm) :
+    class Meta :
+        model = TrackingCode
+        fields = ["link" , "tracking_code"]
+        labels = {"link" : "لینک رهگیری" , "tracking_code" : "کد رهگیری"}
+        
+class CommentAdded(forms.ModelForm) :
+    class Meta :
+        model =  Comments
+        fields = ["text"]
+        labels = {"text" : "comment"}
+
+class ReplayAdded(forms.ModelForm) : 
+    class Meta :
+        model = Replay
+        fields = ["text"]
+        labels = {"text" : "Replay"}

@@ -2,9 +2,15 @@
     {% if user.is_authenticated %}
     <p>Hello {{user.username}}.</p>
     {% endif %}
+    <form action="{% url 'ghoghnoos:search_result' %}" method="get">
+        <input type="text" name="q" placeholder="جستجو...">
+        <button name="submit">Search</button>
+    </form>
     <a href="{% url 'ghoghnoos:index' %}">Home</a> -
     <a href="{% url 'ghoghnoos:admin_panel' %}">Admin Panel</a> -
     <a href="{% url 'ghoghnoos:buy_page' %}">Buy page</a> -
+    <a href="{% url 'users:chat_page' %}">Chat</a>
+    <a href="{% url 'users:chat_admin_page' user.username %}">Admin Chat</a>
     {% if not user.is_authenticated %} 
     <a href="{% url 'users:login' %}">Log in</a> -
     <a href="{% url 'users:register' %}">Register</a>

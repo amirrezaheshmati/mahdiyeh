@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-#from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Category(models.Model) :
@@ -23,7 +23,7 @@ class Product(models.Model):
     name = models.CharField(max_length=20)
     price = models.PositiveBigIntegerField()
     totall_price = models.PositiveBigIntegerField(default=0)
-    #likes = models.ManyToManyField(User , blank=True , related_name="like")
+    likes = models.ManyToManyField(User , blank=True , related_name="like_pro")
     picture = models.ImageField()
     describe = models.TextField()
     url_name = models.CharField(max_length=20 , default="-")
@@ -38,6 +38,7 @@ class Special(models.Model) :
     picture = models.ImageField()
     describe = models.TextField()
     url_name = models.CharField(max_length=20 , default="-")
+    likes = models.ManyToManyField(User , blank=True , related_name="like_special") 
     
     def __str__(self) :
         return self.name
@@ -51,9 +52,32 @@ class Discount(models.Model) :
     picture = models.ImageField()
     describe = models.TextField()
     url_name = models.CharField(max_length=20 , default="-")
+    likes = models.ManyToManyField(User , blank=True , related_name="like_discount")
     
     def __str__(self) :
         return f"{self.name} => {self.percent}"
+
+class Comments(models.Model) :
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE , blank=True  , null=True)
+    special = models.ForeignKey(Special, on_delete=models.CASCADE , blank=True  , null=True)
+    discount = models.ForeignKey(Discount, on_delete=models.CASCADE , blank=True  , null=True)
+    text = models.TextField()
+    likes = models.ManyToManyField(User , blank=True , related_name="like_commnet")
+    date_added = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.text[:50]}..."
+
+class Replay(models.Model) :
+    user = models.ForeignKey(User , on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comments , on_delete=models.CASCADE , related_name="replay")
+    text = models.TextField()
+    likes = models.IntegerField(default=0 )
+    date_added = models.DateTimeField(auto_now_add=True )
+    
+    def __str__(self):
+        return f"{self.text[:50]}..."
 
 class Colors(models.Model) :
     product = models.ForeignKey(Product , on_delete=models.CASCADE , blank=True , null=True)
@@ -98,3 +122,8 @@ class Order(models.Model) :
     buy_action = models.BooleanField(default=False)
     buy_history = models.BooleanField(default=False)
     add_buy_page = models.BooleanField(default=False)
+
+class TrackingCode(models.Model) :
+    user = models.ForeignKey(User , on_delete=models.CASCADE , null=True, blank=True)
+    link = models.TextField()
+    tracking_code = models.PositiveBigIntegerField()

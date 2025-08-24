@@ -1,0 +1,8 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<form action="{% url 'ghoghnoos:add_replay' product_id comment.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Add replay</button>
+</form>
+{% endblock content %}

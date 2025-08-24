@@ -1,0 +1,15 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<ul>
+    {% for userr in users %}
+    <li>
+        <a href="{% url 'users:chat_admin_page' userr.username %}"><p>{{userr.username}}</p></a>
+        {% if userr.unread_count > 0 %}
+        <span>$</span>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>nothing</p>
+    {% endfor %}
+</ul>
+{% endblock content %}

@@ -1,0 +1,9 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<p>Add new comment :</p>
+<form action="{% url 'ghoghnoos:add_comment' product.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Add comment</button>
+</form>
+{% endblock content %}
