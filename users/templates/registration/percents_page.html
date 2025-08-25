@@ -1,0 +1,14 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<h4>invite_link : {{invite_link}}</h4>
+<ul>
+    {% for percent in percents %}
+    <li>
+        <p>{{percent.percent_code}}</p>
+        <p>{{percent.percent}}%</p>
+    </li>
+    {% empty %}
+    <h2>You not have Percent</h2>
+    {% endfor %}
+</ul>
+{% endblock content %}

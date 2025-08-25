@@ -1,0 +1,9 @@
+{% extends "ghoghnoos/base.html" %}
+{% block content %}
+<h1>شما  توسط {{user_up}} دعوت شده اید</h1>
+<form action="{% url 'users:register_invite' user_up %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name="submit">Register</button>
+</form>
+{% endblock content %}

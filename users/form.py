@@ -6,10 +6,10 @@ class Profill(forms.ModelForm) :
     class Meta :
         model = Acount
         fields = ["name" , "number_phone1" , "number_phone2" ,
-                 "post_code" ,  "addres"]
+                 "post_code" , "percent", "addres"]
         labels = {"name" : "name" , "number_phone1" : "number phone" ,
                   "number_phone2" : "another number phone" ,
-                  "post_code" : "post code" , "addres" : "addres"}
+                  "post_code" : "post code" ,"percent" : "percent" , "addres" : "addres"}
 
 class Chats(forms.ModelForm) :
     class Meta :

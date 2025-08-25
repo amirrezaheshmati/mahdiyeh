@@ -2,8 +2,9 @@ from django.shortcuts import render , redirect
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .form import Profill , Chats
-from .models import Acount , Chat
+from .models import Acount , Chat , UserPercent , UserInvite
 from ghoghnoos.models import Order , Colors
+from random import choice
 import jdatetime
 from django.contrib.auth.models import User
 from django.db.models import Q , Count
@@ -14,30 +15,33 @@ def register(request) :
     else :
         form = UserCreationForm(data = request.POST)
         if form.is_valid() :
+            print("usul")
+            user_owner = request.user
             new_user = form.save()
             login(request ,new_user)
-            return redirect("ghoghnoos:index")
+            return redirect("users:user_invite" , user_owner = user_owner , user_up = "None")
         
     context ={"form" : form}
     return render(request ,"registration/register.html" , context)
 
+def register_invite(request , user_up) :
+    if request.method != "POST" :
+        form = UserCreationForm()
+    else :
+        form = UserCreationForm(data = request.POST)
+        if form.is_valid() :
+            print("invite")
+            user_owner = request.user
+            new_user = form.save()
+            login(request ,new_user)
+            return redirect("users:user_invite" , user_up = user_up , user_owner = user_owner)
+        
+    context ={"form" : form , "user_up" : user_up}
+    return render(request ,"registration/invite_register.html" , context)
+
 def fill_profill(request , totall_price) :
     order = Order.objects.filter(user = request.user ,add_buy_page = True)
-    for pro in order :
-        if pro.product :
-            color = Colors.objects.get(name_color = pro.color , product = pro.product)
-        elif pro.special :
-            color = Colors.objects.get(name_color = pro.color , special = pro.special)
-        elif pro.discount :
-            color = Colors.objects.get(name_color = pro.color , discount = pro.discount)
-        color.count -= pro.count
-        pro.add_buy_page = False
-        pro.date_added = f"{jdatetime.datetime.now().strftime("%Y/%m/%d : %H")}"
-        pro.buy_action = True
-        pro.count_action += pro.count
-        pro.count = 0
-        color.save()
-        pro.save()
+    user_up = UserInvite.objects.get(user_owner = request.user).user_up
     try :
         acount = Acount.objects.get(user = request.user)
     except Acount.DoesNotExist :
@@ -47,7 +51,47 @@ def fill_profill(request , totall_price) :
     else :
         form = Profill(instance=acount , data=request.POST)
         if form.is_valid() :
-            form.save()
+            new = form.save()
+            try :
+                percent = UserPercent.objects.get(percent_code = new.percent)
+                percent.delete()
+                real_percent = percent.percent
+            except UserPercent.DoesNotExist :
+                real_percent = 0
+            totall_price = totall_price - (real_percent * totall_price)
+            if totall_price >0 :
+                if user_up :
+                    while True :
+                        percent_code = ""
+                        for num in range(8) :
+                            percent_code += str(choice(range(10)))
+                        for percents in UserPercent.objects.all() :
+                            if percents.percent_code == percent_code :
+                                acssecc = False
+                            else :
+                                acssecc = True
+                        if acssecc :
+                            break
+                    UserPercent.objects.create(
+                        user = user_up ,
+                        percent_code = percent_code ,
+                        percent = 10
+                    )
+            for pro in order :
+                if pro.product :
+                    color = Colors.objects.get(name_color = pro.color , product = pro.product)
+                elif pro.special :
+                    color = Colors.objects.get(name_color = pro.color , special = pro.special)
+                elif pro.discount :
+                    color = Colors.objects.get(name_color = pro.color , discount = pro.discount)
+                color.count -= pro.count
+                pro.add_buy_page = False
+                pro.date_added = f"{jdatetime.datetime.now().strftime("%Y/%m/%d : %H")}"
+                pro.buy_action = True
+                pro.count_action += pro.count
+                pro.count = 0
+                color.save()
+                pro.save()
             return redirect(f"https://zarinp.al/python_developer?amount={totall_price}")
     
     context = {"form" : form , "totall_price" : totall_price}
@@ -111,3 +155,25 @@ def chat_user_page(request) :
             chat.save()
     context = {"chats" : chats , "form" : form}
     return render(request , "registration/chat_page.html" , context)
+
+def user_invite(request , user_up , user_owner) :
+    new_user_owner = User.objects.get(username = user_owner)
+    if user_up != "None" :
+        new_user_up = User.objects.get(username = user_up)
+    else :
+        new_user_up = None
+    invite_link = f"http://localhost:8000/users/register_invite/{new_user_owner.username}/"
+    
+    UserInvite.objects.create(
+        user_owner = new_user_owner ,
+        user_up = new_user_up , 
+        invite_link = invite_link
+    )
+    return redirect("ghoghnoos:index")
+
+def user_percents(request) :
+    user = request.user
+    percents = UserPercent.objects.all().filter(user = user)
+    invite_link = UserInvite.objects.get(user_owner = user).invite_link
+    context = {"percents" : percents , "invite_link" : invite_link}
+    return render(request , "registration/percents_page.html" , context)
