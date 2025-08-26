@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 class Category(models.Model) :
     name = models.CharField(max_length=20)
     url_name = models.CharField(max_length=20 , default="-")
+    #picture = models.ImageField()
     
     def __str__(self) :
         return self.name
@@ -14,6 +15,7 @@ class Subset(models.Model) :
     category = models.ForeignKey(Category , on_delete=models.CASCADE)
     name = models.CharField(max_length=20)
     url_name = models.CharField(max_length=20 , default="-")
+    #picture = models.ImageField()
     
     def __str__(self) :
         return self.name

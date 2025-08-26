@@ -1,5 +1,5 @@
 from django import forms
-
+from PIL import Image
 from .models import Product , Category , Subset ,\
 Special , Discount , Colors, Size , Order , TrackingCode , Comments , Replay
 
@@ -27,6 +27,22 @@ class AddProduct(forms.ModelForm) :
         if Subset.objects.filter(name = name).exists() :
             raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
         return name
+    
+    def clean_picture(self):
+        photo = self.cleaned_data.get('picture')
+
+        if photo:
+            img = Image.open(photo)
+            width, height = img.size
+            ratio = width / height
+
+            expected_ratio = 5 / 4  # نسبت مورد نظر
+
+            # کمی خطای کوچک مجاز (برای جلوگیری از مشکل اعشار)
+            if not (abs(ratio - expected_ratio) < 0.01):
+                raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
+
+        return photo
         
 class AddCategory(forms.ModelForm) :
     class Meta :
@@ -94,6 +110,21 @@ class AddSpecial(forms.ModelForm) :
             raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
         return name
 
+    def clean_picture(self):
+        photo = self.cleaned_data.get('picture')
+
+        if photo:
+            img = Image.open(photo)
+            width, height = img.size
+            ratio = width / height
+
+            expected_ratio = 5 / 4  # نسبت مورد نظر
+
+            # کمی خطای کوچک مجاز (برای جلوگیری از مشکل اعشار)
+            if not (abs(ratio - expected_ratio) < 0.01):
+                raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
+
+        return photo
 class AddDiscount(forms.ModelForm) :
     class Meta :
         model = Discount
@@ -119,6 +150,22 @@ class AddDiscount(forms.ModelForm) :
             raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
         return name
 
+    def clean_picture(self):
+        photo = self.cleaned_data.get('picture')
+
+        if photo:
+            img = Image.open(photo)
+            width, height = img.size
+            ratio = width / height
+
+            expected_ratio = 5 / 4  # نسبت مورد نظر
+
+            # کمی خطای کوچک مجاز (برای جلوگیری از مشکل اعشار)
+            if not (abs(ratio - expected_ratio) < 0.01):
+                raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
+
+        return photo
+    
 class AddColor(forms.ModelForm) :
     class Meta :
         model = Colors

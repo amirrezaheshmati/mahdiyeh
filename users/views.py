@@ -86,7 +86,7 @@ def fill_profill(request , totall_price) :
                     color = Colors.objects.get(name_color = pro.color , discount = pro.discount)
                 color.count -= pro.count
                 pro.add_buy_page = False
-                pro.date_added = f"{jdatetime.datetime.now().strftime("%Y/%m/%d : %H")}"
+                pro.date_added = f"{jdatetime.datetime.now().strftime('%Y/%m/%d : %H')}"
                 pro.buy_action = True
                 pro.count_action += pro.count
                 pro.count = 0

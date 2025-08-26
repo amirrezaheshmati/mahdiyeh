@@ -1,26 +1,173 @@
-<p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+</head>
+<body>
+    <nav class="p-1 rounded-full" style="margin: clamp(10px , 2vw , 20px);display: flex; justify-content:space-between;" >
+    <div style="display: flex;">
+        <div class="text-center">
+            <svg class="text-gray-800 dark:text-white" style=" color:#2e7d32; width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px);" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="none" viewBox="0 0 24 24" data-drawer-target="drawer-navigation" data-drawer-show="drawer-navigation" aria-controls="drawer-navigation">
+                <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M9 8h10M9 12h10M9 16h10M4.99 8H5m-.02 4h.01m0 4H5"/>
+            </svg>
+        </div>
+        
+        <form action="{% url 'ghoghnoos:search_result' %}" method="get">
+            <div class="flex">
+                <div class="relative w-full" style="margin-top: clamp(2px , 0.5vw , 10px);">
+                    <input type="search" name="q" id="search-dropdown" class="block p-2.5 z-20
+                    text-sm text-gray-900 bg-gray-50 rounded-e-lg rounded-s-gray-100 rounded-s-2
+                    border border-gray-300 focus:ring-blue-500 focus:border-blue-500
+                    dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400
+                    dark:text-white dark:focus:border-blue-500" placeholder="Search"
+                    style="height: clamp( 10px , 2vw , 22px); width: clamp( 140px , 40vw , 500px ); margin-left: clamp(7px , 2vw , 20px);" required />
+                    <button type="submit" class="absolute top-0 end-0 p-2.5 h-full text-sm
+                    font-medium text-white bg-blue-700 rounded-e-lg border border-blue-700
+                    hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 
+                    dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    <svg class="w-3 h-3" style="margin-top: -5px;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                    fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg></button>
+                </div>
+            </div>
+        </form>
+    </div>
+    {% if not user.is_superuser %}
     {% if user.is_authenticated %}
-    <p>Hello {{user.username}}.</p>
-    <a href="{% url 'users:chat_admin_page' user.username %}">Admin Chat</a> - 
+    <div>
+        <a href="{% url 'ghoghnoos:buy_page' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+            </svg> 
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'users:percents_page' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M8.891 15.107 15.11 8.89m-5.183-.52h.01m3.089 7.254h.01M14.08 3.902a2.849 2.849 0 0 0 2.176.902 2.845 2.845 0 0 1 2.94 2.94 2.849 2.849 0 0 0 .901 2.176 2.847 2.847 0 0 1 0 4.16 2.848 2.848 0 0 0-.901 2.175 2.843 2.843 0 0 1-2.94 2.94 2.848 2.848 0 0 0-2.176.902 2.847 2.847 0 0 1-4.16 0 2.85 2.85 0 0 0-2.176-.902 2.845 2.845 0 0 1-2.94-2.94 2.848 2.848 0 0 0-.901-2.176 2.848 2.848 0 0 1 0-4.16 2.849 2.849 0 0 0 .901-2.176 2.845 2.845 0 0 1 2.941-2.94 2.849 2.849 0 0 0 2.176-.901 2.847 2.847 0 0 1 4.159 0Z"/>
+            </svg>
+        </a>
+    </div>
+    {% else %}
+    <div>
+        <a href="{% url 'users:login' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+            </svg> 
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'users:login' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.4" d="M8.891 15.107 15.11 8.89m-5.183-.52h.01m3.089 7.254h.01M14.08 3.902a2.849 2.849 0 0 0 2.176.902 2.845 2.845 0 0 1 2.94 2.94 2.849 2.849 0 0 0 .901 2.176 2.847 2.847 0 0 1 0 4.16 2.848 2.848 0 0 0-.901 2.175 2.843 2.843 0 0 1-2.94 2.94 2.848 2.848 0 0 0-2.176.902 2.847 2.847 0 0 1-4.16 0 2.85 2.85 0 0 0-2.176-.902 2.845 2.845 0 0 1-2.94-2.94 2.848 2.848 0 0 0-.901-2.176 2.848 2.848 0 0 1 0-4.16 2.849 2.849 0 0 0 .901-2.176 2.845 2.845 0 0 1 2.941-2.94 2.849 2.849 0 0 0 2.176-.901 2.847 2.847 0 0 1 4.159 0Z"/>
+            </svg>
+        </a>
+    </div>
     {% endif %}
-    <form action="{% url 'ghoghnoos:search_result' %}" method="get">
-        <input type="text" name="q" placeholder="جستجو...">
-        <button name="submit">Search</button>
-    </form>
-    <a href="{% url 'ghoghnoos:index' %}">Home</a> -
-    <a href="{% url 'ghoghnoos:admin_panel' %}">Admin Panel</a> -
-    <a href="{% url 'ghoghnoos:buy_page' %}">Buy page</a> -
-    <a href="{% url 'users:chat_page' %}">Chat</a> - 
-    <a href="{% url 'users:percents_page' %}">Percents</a>
-    {% if not user.is_authenticated %} 
-    <a href="{% url 'users:login' %}">Log in</a> -
-    <a href="{% url 'users:register' %}">Register</a>
+    {% else %}
+    <div>
+        <a href="{% url 'ghoghnoos:admin_panel' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M17 10v1.126c.367.095.714.24 1.032.428l.796-.797 1.415 1.415-.797.796c.188.318.333.665.428 1.032H21v2h-1.126c-.095.367-.24.714-.428 1.032l.797.796-1.415 1.415-.796-.797a3.979 3.979 0 0 1-1.032.428V20h-2v-1.126a3.977 3.977 0 0 1-1.032-.428l-.796.797-1.415-1.415.797-.796A3.975 3.975 0 0 1 12.126 16H11v-2h1.126c.095-.367.24-.714.428-1.032l-.797-.796 1.415-1.415.796.797A3.977 3.977 0 0 1 15 11.126V10h2Zm.406 3.578.016.016c.354.358.574.85.578 1.392v.028a2 2 0 0 1-3.409 1.406l-.01-.012a2 2 0 0 1 2.826-2.83ZM5 8a4 4 0 1 1 7.938.703 7.029 7.029 0 0 0-3.235 3.235A4 4 0 0 1 5 8Zm4.29 5H7a4 4 0 0 0-4 4v1a2 2 0 0 0 2 2h6.101A6.979 6.979 0 0 1 9 15c0-.695.101-1.366.29-2Z" clip-rule="evenodd"/>
+            </svg>
+        </a>
+    </div>
+    <div>
+        <a href="{% url 'users:chat_list' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                <path fill-rule="evenodd" d="M12 2a7 7 0 0 0-7 7 3 3 0 0 0-3 3v2a3 3 0 0 0 3 3h1a1 1 0 0 0 1-1V9a5 5 0 1 1 10 0v7.083A2.919 2.919 0 0 1 14.083 19H14a2 2 0 0 0-2-2h-1a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1a2 2 0 0 0 1.732-1h.351a4.917 4.917 0 0 0 4.83-4H19a3 3 0 0 0 3-3v-2a3 3 0 0 0-3-3 7 7 0 0 0-7-7Zm1.45 3.275a4 4 0 0 0-4.352.976 1 1 0 0 0 1.452 1.376 2.001 2.001 0 0 1 2.836-.067 1 1 0 1 0 1.386-1.442 4 4 0 0 0-1.321-.843Z" clip-rule="evenodd"/>
+            </svg>
+        </a>
+    </div>
     {% endif %}
-    {% if user.is_authenticated %}
-    <form action="{% url 'users:logout' %}" method="post">
-        {% csrf_token %}
-        <button name="submit">Log out</button>
-    </form>
-    {% endif %}
-</p>
+    <div>
+        <a href="{% url 'ghoghnoos:index' %}">
+            <svg class="text-gray-800 dark:text-white" style="width:clamp(25px,5vw,35px); height:auto; margin-left:clamp(5px , 2vw , 13px); color:#2e7d32;" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+            </svg>
+        </a>
+    </div>
+    </nav>
+    
+<!-- drawer component -->
+<div id="drawer-navigation" class="fixed top-0 left-0 z-40 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+    <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+    <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 end-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white" >
+        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+        <span class="sr-only">Close menu</span>
+    </button>
+    <div class="py-4 overflow-y-auto">
+        <ul class="space-y-2 font-medium">
+            {% if user.is_authenticated %}
+            <li style="margin-top: 10px;"><p>Hello {{user.username}}.</p></li>
+            {% endif %}
+            <li style="margin-top: 20px;"><p><a href="{% url 'ghoghnoos:index' %}"
+                class="text-blue-600/100 dark:text-sky-400/100 flex">
+                <svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
+                </svg><span>Home</span>
+            </a></p></li>
+            {% if user.is_superuser %}
+            <li style="margin-top: 20px;"><p><a href="{% url 'ghoghnoos:admin_panel' %}"
+                class="text-blue-600/100 dark:text-sky-400/100 flex">
+                <svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="square" stroke-linejoin="round" stroke-width="2" d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                </svg><span>Admin Panel</span>
+            </a></p></li>
+            <li style="margin-top: 20px;"><p><a href="{% url 'users:chat_list' %}"
+                class="flex text-blue-600/100 dark:text-sky-400/100"><svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                </svg><span>Chat</span></a></p>
+            </li>
+            {% endif %}
+            {% if user.is_authenticated %}
+            {% if not user.is_superuser %}
+            <li style="margin-top: 20px;"><p><a href="{% url 'ghoghnoos:buy_page' %}"
+                class="text-blue-600/100 dark:text-sky-400/100 flex">
+                <svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
+                </svg><span>Buy page</span>
+                </a></p></li>
+            <li style="margin-top: 20px;"><p><a href="{% url 'users:percents_page' %}"
+                class="text-blue-600/100 dark:text-sky-400/100 flex">
+                <svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.891 15.107 15.11 8.89m-5.183-.52h.01m3.089 7.254h.01M14.08 3.902a2.849 2.849 0 0 0 2.176.902 2.845 2.845 0 0 1 2.94 2.94 2.849 2.849 0 0 0 .901 2.176 2.847 2.847 0 0 1 0 4.16 2.848 2.848 0 0 0-.901 2.175 2.843 2.843 0 0 1-2.94 2.94 2.848 2.848 0 0 0-2.176.902 2.847 2.847 0 0 1-4.16 0 2.85 2.85 0 0 0-2.176-.902 2.845 2.845 0 0 1-2.94-2.94 2.848 2.848 0 0 0-.901-2.176 2.848 2.848 0 0 1 0-4.16 2.849 2.849 0 0 0 .901-2.176 2.845 2.845 0 0 1 2.941-2.94 2.849 2.849 0 0 0 2.176-.901 2.847 2.847 0 0 1 4.159 0Z"/>
+                </svg><span>Percents</span>
+            </a></p></li>
+            <li style="margin-top: 20px;"><p><a href="{% url 'users:chat_page' %}"
+                class="flex text-blue-600/100 dark:text-sky-400/100"><svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.5h.01m-4.01 0h.01M8 10.5h.01M5 5h14a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1h-6.6a1 1 0 0 0-.69.275l-2.866 2.723A.5.5 0 0 1 8 18.635V17a1 1 0 0 0-1-1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z"/>
+                </svg><span>Chat</span></a></p></li>
+            <li style="margin-top: 20px;"><p><a href="tel:+989031204587"
+            class="flex text-blue-600/100 dark:text-sky-400/100"><svg class="w-6 h-6 text-blue-600/100 dark:text-sky-400/100" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.427 14.768 17.2 13.542a1.733 1.733 0 0 0-2.45 0l-.613.613a1.732 1.732 0 0 1-2.45 0l-1.838-1.84a1.735 1.735 0 0 1 0-2.452l.612-.613a1.735 1.735 0 0 0 0-2.452L9.237 5.572a1.6 1.6 0 0 0-2.45 0c-3.223 3.2-1.702 6.896 1.519 10.117 3.22 3.221 6.914 4.745 10.12 1.535a1.601 1.601 0 0 0 0-2.456Z"/>
+            </svg><span>Call</span>
+            </a></p></li>
+            {% endif %}
+            <form action="{% url 'users:logout' %}"
+            class="text-blue-600/100 dark:text-sky-400/100" method="post">
+            {% csrf_token %}
+            <button name="submit"
+            class="text-blue-600/100 dark:text-sky-400/100"
+            style="margin-top: 20px;">Log out</button>
+            </form>
+            {% endif %}
+            {% if not user.is_authenticated %}
+            <li style="margin-top: 20px;"><p><a href="{% url 'users:login' %}"
+                class="text-blue-600/100 dark:text-sky-400/100">Log in</a></p></li>
+            <li style="margin-top: 20px;"><p><a href="{% url 'users:register' %}"
+                class="text-blue-600/100 dark:text-sky-400/100">Register</a></p></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>
 {% block content %}{% endblock content %}

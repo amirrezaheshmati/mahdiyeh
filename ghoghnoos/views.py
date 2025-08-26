@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404 , redirect
 from django.db.models import Q
 from users.models import Acount
 from .models import Product , Category , Subset , Discount ,\
-    Special , Order , Colors , Size , User , TrackingCode , Comments , Replay
+    Special , Order , Colors , Size , User , TrackingCode , Comments
 from .form import AddProduct , AddCategory , AddSubset , AddColor , \
     AddSize , OrderForm , AddSpecial , AddDiscount , TrackingForm , ReplayAdded , CommentAdded
 import jdatetime
@@ -350,7 +350,7 @@ def complite_order(request , username) :
         new_order.color = obj.color
         new_order.size = obj.size
         new_order.date_added = obj.date_added
-        new_order.date_sended = f"{jdatetime.datetime.now().strftime("%Y/%m/%d : %H")}"
+        new_order.date_sended = f"{jdatetime.datetime.now().strftime('%Y/%m/%d : %H')}"
         new_order.count_history = obj.count_action
         new_order.buy_history = True
         new_order.save()
@@ -369,20 +369,20 @@ def admin_history(request) :
     context = {"order" : order}
     return render(request , "ghoghnoos/admin_history.html" , context)
 
-def like_post(request, post_id) :
+def like_post(request, where , post_name) :
     try :
-        like = get_object_or_404(Product , id = post_id)
+        like = Product.objects.get(url_name = post_name)
     except  Product.DoesNotExist :
         try :
-            like = get_object_or_404(Special , id = post_id)
+            like = Special.objects.get(url_name = post_name)
         except Special.DoesNotExist :
-            like = get_object_or_404(Discount , id = post_id)
+            like = Discount.objects.get(url_name = post_name)
     if request.user in like.likes.all() :
         like.likes.remove(request.user)
     else :
         like.likes.add(request.user)
         
-    return redirect("ghoghnoos:product_list")
+    return redirect(f"ghoghnoos:{where}")
 
 def like_comment(request , comment_id , product_id) :
     like = get_object_or_404(Comments , id = comment_id)

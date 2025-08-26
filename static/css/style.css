@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "MyFont";
+    src: url("media/Shabnam.ttf") format("truetype");
+}
+@font-face {
+    font-family: "Allura_reg";
+    src: url("media/Allura-Regular.ttf");
+}
+body {
+    background-color: #f5f5dc;
+}
+nav {
+    background-color: #BC915A;
+}

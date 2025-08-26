@@ -27,7 +27,7 @@ urlpatterns = [
     path("comment/<int:product_id>/" , views.comments , name="comments") , 
     path("add_comment/<int:product_id>/" , views.add_comment , name="add_comment"),
     path("add_replay/<int:product_id>/<int:comment_id>" , views.add_replay , name="add_replay"),
-    path("like_post/<int:post_id>/" , views.like_post , name="like_post"),
+    path("like_post/<str:where>/<str:post_name>/" , views.like_post , name="like_post"),
     path("like_comment/<int:comment_id>/<int:product_id>/" , views.like_comment , name="like_comment"),
     path("search_result/" , views.search_product , name="search_result"),
 ]

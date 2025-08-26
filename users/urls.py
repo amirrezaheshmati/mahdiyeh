@@ -12,5 +12,6 @@ urlpatterns  = [
     path("list_chat_admin/" , views.list_chat_admin , name="list_chat_admin"),
     path("chat_admin_page/<str:username>/" , views.chat_admin_page , name="chat_admin_page"),
     path("percents_page/" , views.user_percents , name="percents_page"),
-    path("user_invite/<str:user_up>/<str:user_owner>/" , views.user_invite , name="user_invite")
+    path("user_invite/<str:user_up>/<str:user_owner>/" , views.user_invite , name="user_invite"),
+    path("chat_list/" , views.list_chat_admin , name="chat_list")
 ]
