@@ -1,16 +1,61 @@
 {% extends 'ghoghnoos/base.html' %}
 {% block content %}
-<ul>
-    {% for cate in category %}
-    <li>
-        <a href="{% url 'ghoghnoos:add_subset' cate.url_name %}">{{cate.name}}</a>
-    </li>
-    {% endfor %}
-</ul>
-<h3>Add category</h3>
-<form action="{% url 'ghoghnoos:add_category' %}" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button name="submit">Add</button>
-</form>
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="MyFont">
+<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+    <form action="{% url 'ghoghnoos:add_category' %}" enctype="multipart/form-data" method="post">
+        <p class="text-3xl mt-2 mb-4">دسته بندی ایجاد کنید</p>
+        {% csrf_token %}
+        {{form.name|add_class:"bg-gray-50 mb-5 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:نام و نام خانواگی"}}
+        {{form.picture|add_class:"block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}}
+        <button name="submit" class="mt-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+    </form>
+</div>
+
+
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                    اسم دسته بندی
+                </th>
+                <th scope="col" class="px-6 py-3 text-end">
+                    لینک
+                </th>
+            </tr>
+        </thead>
+        <tbody class="w-full">
+            {% for cate in category %}
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                    <img class="w-10 h-10 rounded-full" src="{{cate.picture.url}}" alt="{{cate.name}}">
+                    <div class="ps-3">
+                        <div class="text-base font-semibold">{{cate.name}}</div>
+                    </div>  
+                </th>
+                <td class="px-6 py-4 w-full">
+                    <div class="w-full text-end">
+                        <a href="{% url 'ghoghnoos:add_subset' cate.url_name %}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">اضافه کردن محصول</a>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
 {% endblock content %}

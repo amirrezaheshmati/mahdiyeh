@@ -1,14 +1,14 @@
 from django import forms
 from PIL import Image
-from .models import Product , Category , Subset ,\
-Special , Discount , Colors, Size , Order , TrackingCode , Comments , Replay
+from .models import Product , Category , Subset , Pictures ,\
+Special , Discount , Colors, Size , Order , TrackingCode , Comments 
 
 class AddProduct(forms.ModelForm) :
     class Meta :
         model = Product
-        fields = ["name" , "price" , "picture" , "describe"]
+        fields = ["name" , "price" , "describe"]
         labels = {"name" : "اسم کالا" , "price" : "قیمت" ,
-                "picture" : "تصویر" , "describe" : "توضیحات"}
+                "describe" : "توضیحات"}
     
     def clean_name(self) :
         name = self.cleaned_data.get("name")
@@ -17,6 +17,62 @@ class AddProduct(forms.ModelForm) :
         if self.instance.pk :
             qs = qs.exclude(pk = self.instance.pk)
         if qs.exists():
+            raise forms.ValidationError("این اسم قبلا در بخش کالاها استفاده شده است")
+        if Special.objects.filter(name = name).exists() :
+            raise forms.ValidationError("این اسم قبلا در بخش فروش ویژه انتخاب شده است")
+        if Discount.objects.filter(name = name).exists() :
+            raise forms.ValidationError("این اسم قبلا در بخش تخفیف ها استفاده شده است")
+        if Category.objects.filter(name = name).exists() :
+            raise forms.ValidationError("اسم محصولات باید با اسم دسته بندی متفاوت باشد")
+        if Subset.objects.filter(name = name).exists() :
+            raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
+        return name
+        
+class AddCategory(forms.ModelForm) :
+    class Meta :
+        model = Category
+        fields = ["name" , "picture"]
+        labels = {"name" : "اسم دسته بندی" , "picture" : "تصویر"}
+    
+    def clean_name(self) :
+        name = self.cleaned_data.get("name")
+        if Product.objects.filter(name = name).exists():
+            raise forms.ValidationError("این اسم قبلا در بخش کالاها استفاده شده است")
+        if Special.objects.filter(name = name).exists() :
+            raise forms.ValidationError("این اسم قبلا در بخش فروش ویژه انتخاب شده است")
+        if Discount.objects.filter(name = name).exists() :
+            raise forms.ValidationError("این اسم قبلا در بخش تخفیف ها استفاده شده است")
+        if Category.objects.filter(name = name).exists() :
+            raise forms.ValidationError("اسم محصولات باید با اسم دسته بندی متفاوت باشد")
+        if Subset.objects.filter(name = name).exists() :
+            raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
+        return name
+
+    def clean_picture(self):
+        photo = self.cleaned_data.get('picture')
+
+        if photo:
+            img = Image.open(photo)
+            width, height = img.size
+            ratio = width / height
+
+            expected_ratio = 5 / 4  # نسبت مورد نظر
+
+            # کمی خطای کوچک مجاز (برای جلوگیری از مشکل اعشار)
+            if not (abs(ratio - expected_ratio) < 0.01):
+                raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
+
+        return photo
+
+class AddSubset(forms.ModelForm) :
+    class Meta :
+        model = Subset
+        fields = ["name" , "picture"]
+        labels = {"name" : "اسم زیر مجموعه" , "picture" : "تصویر"}
+    
+    def clean_name(self) :
+        name = self.cleaned_data.get("name")
+        if Product.objects.filter(name = name).exists():
             raise forms.ValidationError("این اسم قبلا در بخش کالاها استفاده شده است")
         if Special.objects.filter(name = name).exists() :
             raise forms.ValidationError("این اسم قبلا در بخش فروش ویژه انتخاب شده است")
@@ -43,53 +99,13 @@ class AddProduct(forms.ModelForm) :
                 raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
 
         return photo
-        
-class AddCategory(forms.ModelForm) :
-    class Meta :
-        model = Category
-        fields = ["name"]
-        labels = {"name" : "اسم دسته بندی"}
-    
-    def clean_name(self) :
-        name = self.cleaned_data.get("name")
-        if Product.objects.filter(name = name).exists():
-            raise forms.ValidationError("این اسم قبلا در بخش کالاها استفاده شده است")
-        if Special.objects.filter(name = name).exists() :
-            raise forms.ValidationError("این اسم قبلا در بخش فروش ویژه انتخاب شده است")
-        if Discount.objects.filter(name = name).exists() :
-            raise forms.ValidationError("این اسم قبلا در بخش تخفیف ها استفاده شده است")
-        if Category.objects.filter(name = name).exists() :
-            raise forms.ValidationError("اسم محصولات باید با اسم دسته بندی متفاوت باشد")
-        if Subset.objects.filter(name = name).exists() :
-            raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
-        return name
-
-class AddSubset(forms.ModelForm) :
-    class Meta :
-        model = Subset
-        fields = ["name"]
-        labels = {"name" : "اسم زیر مجموعه"}
-    
-    def clean_name(self) :
-        name = self.cleaned_data.get("name")
-        if Product.objects.filter(name = name).exists():
-            raise forms.ValidationError("این اسم قبلا در بخش کالاها استفاده شده است")
-        if Special.objects.filter(name = name).exists() :
-            raise forms.ValidationError("این اسم قبلا در بخش فروش ویژه انتخاب شده است")
-        if Discount.objects.filter(name = name).exists() :
-            raise forms.ValidationError("این اسم قبلا در بخش تخفیف ها استفاده شده است")
-        if Category.objects.filter(name = name).exists() :
-            raise forms.ValidationError("اسم محصولات باید با اسم دسته بندی متفاوت باشد")
-        if Subset.objects.filter(name = name).exists() :
-            raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
-        return name
 
 class AddSpecial(forms.ModelForm) :
     class Meta :
         model = Special
-        fields = ["name" , "price" , "picture" , "describe"]
+        fields = ["name" , "price" , "describe"]
         labels = {"name" : "اسم کالا" , "price" : "قیمت" ,
-                "picture" : "تصویر" , "describe" : "توضیحات"}
+                 "describe" : "توضیحات"}
     
     def clean_name(self) :
         name = self.cleaned_data.get("name")
@@ -110,27 +126,12 @@ class AddSpecial(forms.ModelForm) :
             raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
         return name
 
-    def clean_picture(self):
-        photo = self.cleaned_data.get('picture')
-
-        if photo:
-            img = Image.open(photo)
-            width, height = img.size
-            ratio = width / height
-
-            expected_ratio = 5 / 4  # نسبت مورد نظر
-
-            # کمی خطای کوچک مجاز (برای جلوگیری از مشکل اعشار)
-            if not (abs(ratio - expected_ratio) < 0.01):
-                raise forms.ValidationError("نسبت تصویر باید 5 به 4 باشد.")
-
-        return photo
 class AddDiscount(forms.ModelForm) :
     class Meta :
         model = Discount
-        fields = ["name" , "price1", "price" , "picture" , "describe"]
+        fields = ["name" , "price1", "price" , "describe"]
         labels = {"name" : "اسم کالا" , "price" : "قیمت اصلی" , "price1" : "قیمت بیشتر(تخفیف خورده)",
-                "picture" : "تصویر" , "describe" : "توضیحات"}
+                 "describe" : "توضیحات"}
     
     def clean_name(self) :
         name = self.cleaned_data.get("name")
@@ -150,6 +151,14 @@ class AddDiscount(forms.ModelForm) :
             raise forms.ValidationError("اسم محصولات باید با اسم زیر مجموعه ها متفاوت باشد")
         return name
 
+    
+
+class AddPicture(forms.ModelForm) :
+    class Meta :
+        model = Pictures
+        fields = ["picture"]
+        labels = {"picture" : "تصویر"}
+        
     def clean_picture(self):
         photo = self.cleaned_data.get('picture')
 
@@ -211,9 +220,3 @@ class CommentAdded(forms.ModelForm) :
         model =  Comments
         fields = ["text"]
         labels = {"text" : "comment"}
-
-class ReplayAdded(forms.ModelForm) : 
-    class Meta :
-        model = Replay
-        fields = ["text"]
-        labels = {"text" : "Replay"}

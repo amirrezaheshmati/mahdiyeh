@@ -1,10 +1,32 @@
-{% extends 'ghoghnoos/base.html' %}
+{% extends "ghoghnoos/base.html" %}
 {% block content %}
-<ul>
-    {% for product in subset %}
-    <li><a href="{% url 'ghoghnoos:product_list' category_name product.url_name %}">{{product.name}}</a></li>
-    {% empty %}
-    <p>Nothing</p>
+{% load static %}
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghoghnoos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <style>
+    </style>
+</head>
+<body class="MyFont">
+
+<div class="flex flex-wrap mb-16 justify-center">
+    {% for cate in subset %}
+    <div class="w-full m-2 max-w-64 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+        <a href="{% url 'ghoghnoos:product_list' category_name cate.url_name %}">
+            <img class="p-4 rounded-t-lg" src="{{cate.picture.url}}" alt="product image" style="min-width: 200px;"/>
+            <div class="px-5 pb-5 pr-8 justify-items-end">
+                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{cate.name}}</h5>
+            </div>
+        </a>
+    </div>
     {% endfor %}
-</ul>
+</div>
+</body>
 {% endblock content %}

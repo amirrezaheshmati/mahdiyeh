@@ -1,31 +1,72 @@
 {% extends "ghoghnoos/base.html" %}
 {% block content %}
 {% load humanize %}
-<ul>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+</head>
+<body>
+    
+    {% if tracking %}
+    <p>link : {{tracking.link}}</p>
+    <p>code : {{tracking.tracking_code}}</p>
+<form action="{% url 'ghoghnoos:user_action' %}" method="post">
+    {% csrf_token %}
+    <button name="submit">Delete</button>
+</form>
+{% endif %}
+<div class="mt-5 flex flex-wrap justify-center">
     {% for ord in order %}
-    <li>
+        <div class="w-1/2 max-w-sm pb-5 lg:mx-6 md:mx-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800
+        dark:border-gray-700" style="margin-left: 0px; min-width: 150px;">
         {% if  ord.product %}
-        <img src="{{ord.product.picture.url}}" alt="{{ord.product.url_name}}" style="width: 200px;">
-        <p>{{ord.product.name}}</p>
-        <p>{{ord.product.totall_price|intcomma}}</p>
-        {% endif %}
-        {% if ord.special %}
-        <img src="{{ord.special.picture.url}}" alt="{{ord.special.url_name}}" style="width: 200px;">
-        <p>{{ord.special.name}}</p>
-        <p>{{ord.special.totall_price|intcomma}}</p>
-        {% endif %}
-        {% if ord.discount %}
-        <img src="{{ord.discount.picture.url}}" alt="{{ord.discount.url_name}}" style="width: 200px;">
-        <p>{{ord.discount.name}}</p>
-        <p>{{ord.discount.totall_price|intcomma}}</p>
-        {% endif %}
-        <p>{{ord.count_history}}</p>
-        <p>{{ord.color}}</p>
-        <p>{{ord.size}}</p>
-        <p>{{ord.date_added}}</p>
-        <p>{{ord.date_sended}}</p>
-        <p>{{ord.describe}}</p>
-    </li>
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.product.product_image.first.picture.url}}" alt="{{product.url_name}}" />
+            <div class="lg:px-8 px-4">
+                <h5 class=" lg:mt-0 mt-4 font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.product.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.product.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            {% if ord.special %}
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.special.special_image.first.picture.url}}" alt="{{special.url_name}}" />
+            <div class="lg:px-8 px-4">
+                <h5 class="lg:mt-0 mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.special.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.special.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            {% if ord.discount %}
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.discount.discount_image.first.picture.url}}" alt="{{discount.url_name}}" />
+            <div class="lg:px-8 px-4 ">
+                <h5 class="lg:mt-0 mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.discount.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.discount.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            <div class="lg:px-8 px-4 pb-5">
+                <p class=" font-semibold tracking-tight text-gray-900 dark:text-white mt-2">تعداد : {{ord.count_history}}</p>
+            <p class=" font-semibold tracking-tight text-gray-900 dark:text-white mt-2">رنگ : {{ord.color}}</p>
+            <p class="mb-4 font-semibold tracking-tight text-gray-900 dark:text-white mt-2">اندازه : {{ord.size}}</p>
+            <p class="mb-4 font-semibold tracking-tight text-gray-900 dark:text-white mt-2">زمان خرید : {{ord.date_added}}</p>
+            <p class="mb-4 font-semibold tracking-tight text-gray-900 dark:text-white mt-2">زمان ارسال : {{ord.date_sended}}</p>
+            {% if ord.describe %}
+            <p class="mb-4 font-semibold tracking-tight text-gray-900 dark:text-white mt-2">توضیحات : {{ord.describe}}</p>
+            {% endif %}
+        </div>
+    </div>
     {% endfor %}
-</ul>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>
 {% endblock content %}

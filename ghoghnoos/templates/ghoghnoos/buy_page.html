@@ -1,42 +1,97 @@
 {% extends 'ghoghnoos/base.html' %}
 {% block content %}
+{% load static %}
 {% load humanize %}
-<p><a href="{% url 'ghoghnoos:user_action' %}">Action</a> -
- <a href="{% url 'ghoghnoos:buy_history' %}">History</a></p>
-<h4>Totall price : {{totall_price|intcomma}}</h4>
-<a href="{% url 'users:profill' totall_price %}">Buy</a>
-<ul>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body class="MyFont pb-5">
+<div class="flex flex-wrap">
+    <a href="{% url 'ghoghnoos:user_action' %}" class="max-w-sm w-1/2">
+    <div class=" p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
+        <svg class="w-10 h-10 text-gray-500 dark:text-gray-400 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h6l2 4m-8-4v8m0-8V6a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v9h2m8 0H9m4 0h2m4 0h2v-4m0 0h-5m3.5 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm-10 0a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+        </svg>
+        <h5 class="mb-2 text-xl lg:text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">پیگیری سفارشات</h5>
+        <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">میتونی توی این بخش سفارش هات رو پیگیری کنی</p>
+    </div>
+    </a>
+    <a href="{% url 'ghoghnoos:buy_history' %}" class="max-w-sm w-1/2">
+    <div class=" p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 h-full">
+        <svg class="w-10 h-10 text-gray-500 dark:text-gray-400 mb-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3M3.22302 14C4.13247 18.008 7.71683 21 12 21c4.9706 0 9-4.0294 9-9 0-4.97056-4.0294-9-9-9-3.72916 0-6.92858 2.26806-8.29409 5.5M7 9H3V5"/>
+        </svg>
+
+        <h5 class="mb-2 text-xl lg:text-2xl font-semibold tracking-tight text-gray-900 dark:text-white">تاریخچه</h5>
+        <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">میتونی توی این بخش تاریخچه خریدهات رو ببینی</p>
+    </div>
+    </a>
+</div>
+<div>
+    <p class="text-2xl mt-8 ml-5 mb-5">قیمت کل: {{totall_price|intcomma}}</p>
+    <a href="{% url 'users:profill' totall_price %}" class="ml-5 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">خرید</a>
+</div>
+<div class="mt-5 flex flex-wrap justify-center">
     {% for ord in order %}
-    <li>
-        {% if  ord.product %}
-        <img src="{{ord.product.picture.url}}" alt="{{ord.product.url_name}}" style="width: 200px;">
-        <p>{{ord.product.name}}</p>
-        <p>{{ord.product.totall_price|intcomma}}</p>
-        {% endif %}
-        {% if ord.special %}
-        <img src="{{ord.special.picture.url}}" alt="{{ord.special.url_name}}" style="width: 200px;">
-        <p>{{ord.special.name}}</p>
-        <p>{{ord.special.totall_price|intcomma}}</p>
-        {% endif %}
-        {% if ord.discount %}
-        <img src="{{ord.discount.picture.url}}" alt="{{ord.discount.url_name}}" style="width: 200px;">
-        <p>{{ord.discount.name}}</p>
-        <p>{{ord.discount.totall_price|intcomma}}</p>
-        {% endif %}
-        <p>{{ord.count}}</p>
-        <p>{{ord.color}}</p>
-        <p>{{ord.size}}</p>
-        <p>{{ord.describe}}</p>
-        {% if  ord.product %}
-        <p><a href="{% url 'ghoghnoos:product' ord.product.url_name %}">Edit</a></p>
-        {% endif %}
-        {% if ord.special %}
-        <p><a href="{% url 'ghoghnoos:product' ord.special.url_name %}">Edit</a></p>
-        {% endif %}
-        {% if ord.discount %}
-        <p><a href="{% url 'ghoghnoos:product' ord.discount.url_name %}">Edit</a></p>
-        {% endif %}
-    </li>
+        <div class="w-1/2 max-w-sm pb-5 lg:mx-6 md:mx-4 bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800
+        dark:border-gray-700" style="margin-left: 0px; min-width: 150px;">
+            {% if  ord.product %}
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.product.product_image.first.picture.url}}" alt="{{product.url_name}}" />
+            <div class="lg:px-8 px-4">
+                <h5 class=" lg:mt-0 mt-4 font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.product.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.product.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            {% if ord.special %}
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.special.special_image.first.picture.url}}" alt="{{special.url_name}}" />
+            <div class="lg:px-8 px-4">
+                <h5 class="lg:mt-0 mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.special.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.special.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            {% if ord.discount %}
+            <img class="lg:p-8 md:p-4 p-0 rounded-t-lg" src="{{ord.discount.discount_image.first.picture.url}}" alt="{{discount.url_name}}" />
+            <div class="lg:px-8 px-4 ">
+                <h5 class="lg:mt-0 mt-4 text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ord.discount.name}}</h5>
+                <div class="flex items-center justify-between mt-2">
+                    <span class="text-l font-bold text-gray-900 dark:text-white">{{ord.discount.totall_price|intcomma}} تومان</span>
+                </div>
+            </div>
+            {% endif %}
+            <div class="lg:px-8 px-4 pb-5">
+            <p class=" font-semibold tracking-tight text-gray-900 dark:text-white mt-2">تعداد : {{ord.count}}</p>
+            <p class=" font-semibold tracking-tight text-gray-900 dark:text-white mt-2">رنگ : {{ord.color}}</p>
+            <p class="mb-4 font-semibold tracking-tight text-gray-900 dark:text-white mt-2">اندازه : {{ord.size}}</p>
+            {% if  ord.product %}
+            <p><a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" href="{% url 'ghoghnoos:product' ord.product.url_name %}">ویرایش</a></p>
+            {% endif %}
+            {% if ord.special %}
+            <p><a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" href="{% url 'ghoghnoos:product' ord.special.url_name %}">ویرایش</a></p>
+            {% endif %}
+            {% if ord.discount %}
+            <p><a class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" href="{% url 'ghoghnoos:product' ord.discount.url_name %}">ویرایش</a></p>
+            {% endif %}
+            </div>
+        </div>
     {% endfor %}
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+</body>
+</html>
+        
+        
+    </li>
+    
 </ul>
 {% endblock content %}

@@ -1,14 +1,67 @@
 @font-face {
     font-family: "MyFont";
-    src: url("media/Shabnam.ttf") format("truetype");
+    src: url("/static/css/Shabnam.ttf") format("truetype");
 }
-@font-face {
-    font-family: "Allura_reg";
-    src: url("media/Allura-Regular.ttf");
+@keyframes special {
+    0% {
+        background-color: black;
+        color: rgb(201, 204, 0)
+    }
+    50% {
+        background-color: rgb(201, 204, 0);
+        color: white;
+    }
+    100% {
+        background-color: white;
+        color: black;
+    }
+}
+.special_animate {
+    animation-name: special;
+    animation-duration: 4s;
+    animation-iteration-count: infinite; /* تکرار بی‌نهایت */
+    animation-direction: alternate;
 }
 body {
     background-color: #f5f5dc;
 }
 nav {
     background-color: #BC915A;
+}
+.MyFont {
+    font-family: "MyFont";
+}
+.Iransens {
+    font-family: "Iransens";
+}
+.typewriter {
+  direction: rtl;              /* متن راست‌به‌چپ */
+  text-align: right;           /* تراز راست */
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  border-left: 2px solid black; /* مثل مکان‌نما (cursor) */
+  animation: typing 2s steps(11) infinite alternate,
+             blink .7s step-end infinite;
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 13ch; } /* تعداد کاراکتر متن */
+}
+
+@keyframes blink {
+  50% { border-color: transparent; }
+}
+.footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #222;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.2);
+    z-index: 10000;
 }

@@ -1,21 +1,82 @@
 {% extends "ghoghnoos/base.html" %}
 {% block content %}
-<ul>
-    {% for chat in chats %}
-    <li>
-        <p>{{chat.sender}}</p>
-        <p>{{chat.text}}</p>
-        {% if chat.user_read %}
-        <p>!!</p>
-        {% endif %}
-    </li>
-    {% empty %}
-    <p>nothing</p>
-    {% endfor %}
-</ul>
-<form action="{% url 'users:chat_admin_page' userr.id %}" method="post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button name="submit">Send</button>
-</form>
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+</head>
+<body class="MyFont overflow-hidden">
+<div id="chat-box" class=" overflow-y-auto pb-28" style="height: calc(100vh - 100px);">
+{% for chat in chats %}
+{% if chat.receiver == user %}
+<div class="justify-items-start gap-2.5 ml-5 mt-5" dir="ltr">
+   <div class="flex flex-col min-w-[150px] max-w-[320px] leading-1.5 p-4 border-gray-400 bg-gray-300 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+      <div class="flex items-center space-x-2 ltr:space-x-reverse">
+         <span class="text-sm font-semibold text-gray-900 dark:text-white">{{chat.sender}}</span>
+      </div>
+      <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+   </div>
+</div>
+{% else %}
+{% if chat.user_read %}
+<div class="justify-items-start gap-2.5 mr-5 mt-5" dir="rtl">
+   <div class="flex flex-col min-w-[150px] max-w-[320px] leading-1.5 p-4 border-gray-400 rounded-e-xl rounded-es-xl dark:bg-gray-700" style="background-color: #c5d8c4;">
+      <div class="items-center space-x-2 ltr:space-x-reverse">
+         <p class="text-sm text-start font-semibold text-gray-900 dark:text-white">Admin</p>
+      </div>
+      <p class="text-sm font-normal text-start py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mb-[-10px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </svg>
+
+    </div>
+</div>
+{% else %}
+<div class="justify-items-start gap-2.5 mr-5 mt-5" dir="rtl">
+   <div class="flex flex-col min-w-[150px] max-w-[320px] leading-1.5 p-4 border-gray-400 rounded-e-xl rounded-es-xl dark:bg-gray-700" style="background-color: #c5d8c4;">
+      <div class="items-center space-x-2 ltr:space-x-reverse">
+         <p class="text-sm text-start font-semibold text-gray-900 dark:text-white">Admin</p>
+      </div>
+      <p class="text-sm font-normal text-start py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+      <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mb-[-10px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+        </svg>
+   </div>
+</div>
+{% endif %}
+{% endif %}
+<div id="last-message"></div>
+{% endfor %}
+
+<div class="footer-bar">
+    <form action="{% url 'users:chat_admin_page' userr.username %}" method="post">
+        <label for="message" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Message</label>
+        <div class="relative">
+            {% csrf_token %}
+            {{form.text|add_class:"bg-gray-50 h-12 w-full mb-5 m-1 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:پیامی ارسال کنید"}}
+            <button type="submit" class=" absolute end-2.5 bottom-2.5">
+                <svg class="w-[24px] h-[24px] text-gray-500 dark:text-gray-400 mb-1 rotate-90" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="currentColor" viewBox="0 0 24 24">
+                    <path fill-rule="evenodd" d="M12 2a1 1 0 0 1 .932.638l7 18a1 1 0 0 1-1.326 1.281L13 19.517V13a1 1 0 1 0-2 0v6.517l-5.606 2.402a1 1 0 0 1-1.326-1.281l7-18A1 1 0 0 1 12 2Z" clip-rule="evenodd"/>
+                </svg>
+
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+<script>
+    window.onload = function() {
+        var chatBox = document.getElementById("chat-box");
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+</script>
+</body>
+</html>
 {% endblock content %}

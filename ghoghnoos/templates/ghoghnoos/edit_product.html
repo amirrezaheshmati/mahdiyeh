@@ -1,33 +1,135 @@
 {% extends "ghoghnoos/base.html" %}
 {% block content %}
-<h3>{{product.name}} :</h3>
-<img src="{{product.picture.url}}" alt="{{product.url_name}}" style="width: 200px;">
-<p>{{product.price}}</p>
-<h4>Colors:</h4>
-<ul>
-    {% for col in color %}
-    <li>
-        <p>{{col.name_color}}</p>
-    </li>
-    {% endfor %}
-</ul>
-<h4>Size:</h4>
-<ul>
-    {% for siz in size %}
-    <li>
-        <p>{{siz.height}}*{{siz.width}}*{{siz.colm}}</p>
-    </li>
-    {% endfor %}
-</ul>
-<form action="{% url 'ghoghnoos:edit_product' product.url_name %}"
-enctype="multipart/form-data" method="post">
-    {%csrf_token%}
-    <h5>product edit</h5>
-    {{form_product.as_p}}
-    <h5>color edit</h5>
-    {{form_color.as_p}}
-    <h5>size edit</h5>
-    {{form_size.as_p}}
-    <button name="submit">Edit</button>
-</form>
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="justify-items-center">
+    <div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <div class="snap-x snap-mandatory flex overflow-x-auto space-x-4 p-4" >
+        {% for img in image %}
+            <div class="snap-center snap-always shrink-0 w-64 h-100 bg-gray-100 rounded-lg-flex items-center justify-center">
+                <div class="flex flex-col gap-1">
+                    <div class="flex flex-col w-full max-w-[326px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                        <div class="group relative my-2.5">
+                            <div class="absolute w-full h-full bg-gray-900/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg flex items-center justify-center">
+                                <form action="{% url 'ghoghnoos:delete_picture' product.url_name img.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button data-tooltip-target="download-image" class="inline-flex items-center justify-center rounded-full h-10 w-10 bg-white/30 hover:bg-white/50 focus:ring-4 focus:outline-none dark:text-white focus:ring-gray-50">
+                                        <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z"/>
+                                        </svg>
+                                    </button>
+                                </form>
+                                <div id="download-image" role="tooltip" class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-xs opacity-0 tooltip dark:bg-gray-700">
+                                    Download image
+                                    <div class="tooltip-arrow" data-popper-arrow></div>
+                                </div>
+                            </div>
+                            <img src="{{img.picture.url}}" class="rounded-lg" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        <form action="{% url 'ghoghnoos:edit_product' product.url_name %}"
+            enctype="multipart/form-data" class="justify-items-center" method="post">
+            <p class="text-3xl mt-2 mb-4">{{product.name}}</p>
+            <div class="relative overflow-x-auto w-full flex">
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 rounded-s-lg text-sm md:text-3xl">
+                                رنگ
+                            </th>
+                            <th scope="col" class="px-3 py-3 rounded-e-lg text-sm md:text-3xl">
+                                قیمت
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for col in color %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                            <th scope="row" class="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-sm md:text-3xl">
+                                {{col.name_color}}
+                            </th>
+                            <td class="px-3 py-4 text-sm md:text-3xl">
+                                {{col.price_color}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 rounded-s-lg text-sm md:text-3xl">
+                                اندازه
+                            </th>
+                            <th scope="col" class="px-3 py-3 rounded-e-lg text-sm md:text-3xl">
+                                قیمت
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for siz in size %}
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                            <th scope="row" class="px-3 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-sm md:text-3xl">
+                                {{siz.height}}*{{siz.width}}*{{siz.colm}}
+                            </th>
+                            <td class="px-3 py-4 text-sm md:text-3xl">
+                                {{siz.price_size}}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% csrf_token %}
+            <div class="flex justify-center w-full m-1 mb-3">
+                {{form_product.name|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:اسم محصول"}}
+                {{form_product.price|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:قیمت"}}
+            </div>
+            {{form_image.picture|add_class:"block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}}
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">نسبت عرض به طول عکس باید 5 به 4 باشد</p>
+            {{form_product.describe|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:توضیحات"}}
+            <!-- Modal toggle -->
+             <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">تنظیمات رنگ</p>
+            {{form_color.name_color|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:اسم رنگ"}}
+            <div class="flex justify-center w-full m-1 mb-3">
+                {{form_color.price_color|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:قیمت"}}
+                {{form_color.count|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:تعداد"}}
+            </div>
+            <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">تنظیمات اندازه</p>
+            <div class="flex justify-center w-full m-1 mb-3">
+                {{form_size.height|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:طول"}}
+                {{form_size.width|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:عرض"}}
+            </div>
+            <div class="flex justify-center w-full m-1 mb-3">
+                {{form_size.price_size|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:قیمت"}}
+                {{form_size.colm|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:ارتفاع"}}
+            </div>
+            <button class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">
+              تایید
+            </button>
+            {% if form.non_field_errors %}
+                <div class="text-red-600 mb-3">
+                    {{form.non_field_errors}}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+</body>
+</html>
 {% endblock content %}

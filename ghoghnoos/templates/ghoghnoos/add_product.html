@@ -1,10 +1,42 @@
 {% extends 'ghoghnoos/base.html' %}
 {% block content %}
-<h3>{{subset.name}}</h3>
-<form action="{% url 'ghoghnoos:add_product' category.name subset.url_name %}"
-    method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button name="submit">Add</button>
-</form>
+{% load static %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<div class="justify-items-center">
+    <div class="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+        <form action="{% url 'ghoghnoos:add_product' category.url_name subset.url_name %}" enctype="multipart/form-data" class="justify-items-center" method="post">
+            <p class="text-3xl mt-2 mb-4">لطفا محصول خود را وارد کنید</p>
+            {% csrf_token %}
+            <div class="flex max-w-96 w-full m-1 mb-3">
+                {{form.name|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:اسم محصول"}}
+                {{form.price|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:قیمت"}}
+            </div>
+                {{image.picture|add_class:"block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"}}
+                <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">نسبت عرض به طول عکس باید 5 به 4 باشد</p>
+                {{form.describe|add_class:"bg-gray-50 m-1 max-w-96 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"|attr:"placeholder:توضیحات"}}
+                <!-- Modal toggle -->
+            <button class="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="submit">
+              مرحله بعد
+            </button>
+            {% if form.non_field_errors %}
+                <div class="text-red-600 mb-3">
+                    {{form.non_field_errors}}
+                </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+</body>
+</html>
 {% endblock content %}
