@@ -356,9 +356,9 @@ def user_action(request) :
     user = request.user
     order = user.order_set.all().filter(buy_action = True)
     if request.method =="POST" :
-        TrackingCode.objects.get(user = user).delete()
+        TrackingCode.objects.get(user = user , id = request.POST.get("del")).delete()
     try :
-        tracking = TrackingCode.objects.get(user = user)
+        tracking = TrackingCode.objects.all().filter(user = user)
     except TrackingCode.DoesNotExist :
         tracking = False
     context = {"order" : order , "tracking" : tracking}

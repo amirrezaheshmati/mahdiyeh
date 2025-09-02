@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>صفحه چت | ققنوس</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css">
@@ -22,7 +22,7 @@
       <div class="flex items-center space-x-2 ltr:space-x-reverse">
          <span class="text-sm font-semibold text-gray-900 dark:text-white">Admin</span>
         </div>
-      <p class="text-sm font-normal py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+      <p class="text-sm font-normal py-2.5 break-words whitespace-pre-line text-gray-900 dark:text-white">{{chat.text}}</p>
    </div>
 </div>
 {% else %}
@@ -30,9 +30,9 @@
 <div class="justify-items-start gap-2.5 mr-5 mt-5" dir="rtl">
    <div class="flex flex-col min-w-[150px] max-w-[320px] leading-1.5 p-4 border-gray-400 rounded-e-xl rounded-es-xl dark:bg-gray-700" style="background-color: #c5d8c4;">
       <div class="items-center space-x-2 ltr:space-x-reverse">
-         <p class="text-sm text-start font-semibold text-gray-900 dark:text-white">{{chat.sender}}</p>
+         <p class="text-sm text-start font-semibold break-words whitespace-pre-line text-gray-900 dark:text-white">{{chat.sender}}</p>
       </div>
-      <p class="text-sm font-normal text-start break-words/ py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+      <p class="text-sm font-normal text-start break-words whitespace-pre-line py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
         <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mb-[-10px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 11.5 11 14l4-4m6 2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
         </svg>
@@ -43,9 +43,9 @@
 <div class="justify-items-start gap-2.5 mr-5 mt-5" dir="rtl">
    <div class="flex flex-col min-w-[150px] max-w-[320px] leading-1.5 p-4 border-gray-400 rounded-e-xl rounded-es-xl dark:bg-gray-700" style="background-color: #c5d8c4;">
       <div class="items-center space-x-2 ltr:space-x-reverse">
-         <p class="text-sm text-start font-semibold text-gray-900 dark:text-white">{{chat.sender}}</p>
+         <p class="text-sm text-start font-semibold break-words whitespace-pre-line text-gray-900 dark:text-white">{{chat.sender}}</p>
       </div>
-      <p class="text-sm font-normal text-start py-2.5 text-gray-900 dark:text-white">{{chat.text}}</p>
+      <p class="text-sm font-normal text-start py-2.5 break-words whitespace-pre-line text-gray-900 dark:text-white">{{chat.text}}</p>
       <svg class="w-5 h-5 text-gray-500 dark:text-gray-400 mb-[-10px]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"  fill="none" viewBox="0 0 24 24">
             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
         </svg>
