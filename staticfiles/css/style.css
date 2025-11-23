@@ -1,0 +1,16 @@
+@font-face {
+    font-family: "MyFont";
+    src: url("irsans.ttf") format("truetype");
+}
+.MyFont {
+    font-family: "MyFont";
+}
+.Iransens {
+    font-family: "Iransens";
+}
+body {
+    background-color: #f5f5dc;
+}
+nav {
+    background-color: #BC915A;
+}
