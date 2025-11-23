@@ -24,7 +24,9 @@ def subset_list(request , category_name) :
 def product_list(request , category_name,subset_name) :
     subset = Subset.objects.get(url_name = subset_name)
     product = subset.product_set.all()
-    context = {"product" : product}
+    page_link = f"product_list%{category_name}%{subset_name}"
+    print(page_link)
+    context = {"product" : product , "link" : page_link}
     return render(request , "ghoghnoos/product_list.html" , context)
 
 def special_list(request) :
@@ -96,6 +98,8 @@ def product(request , product_name) :
             main_color = color.get(name_color = new_order.color)
             size_name = new_order.size.replace("*" , " ").split()
             main_size = size.get(height = size_name[0] , width = size_name[1] , colm = size_name[2])
+            if not new_order.count :
+                new_order.count = 0
             if new_order.count > main_color.count :
                 new_order.count = main_color.count
             product.totall_price += main_color.price_color
@@ -427,9 +431,10 @@ def like_post(request, where , post_name) :
         like.likes.remove(request.user)
     else :
         like.likes.add(request.user)
-        
-    return redirect(f"ghoghnoos:{where}")
-
+    
+    context = {"post_id" : where}
+    return render(request , "ghoghnoos/like_post.html" , context)
+    
 def like_comment(request , comment_id , product_name) :
     like = get_object_or_404(Comments , id = comment_id)
     if request.user in like.likes.all() :

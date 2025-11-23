@@ -22,6 +22,9 @@
     animation-iteration-count: infinite; /* تکرار بی‌نهایت */
     animation-direction: alternate;
 }
+html {
+    scroll-behavior: smooth;
+}
 body {
     background-color: #f5f5dc;
 }
